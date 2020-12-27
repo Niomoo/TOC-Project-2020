@@ -124,8 +124,19 @@ class TocMachine(GraphMachine):
         elif event.message.text.lower() == '藝術文化':
             text = '文青仔喔'
             send_text_message(event.reply_token, text)
-        self.go_back(event)
+        self.go_back_preference(event)
 
+    def is_going_to_show_fsm_pic(self, event):
+         text = event.message.text
+         return text == "查看fsm結構圖"
+
+    def on_enter_show_fsm_pic(self, event):
+         reply_token = event.reply_token
+         message = message_template.show_pic
+         message_to_reply = FlexSendMessage("查看fsm結構圖", message)
+         line_bot_api = LineBotApi( os.getenv('LINE_CHANNEL_ACCESS_TOKEN') )
+         line_bot_api.reply_message(reply_token, message_to_reply)
+         self.go_back_menu(event)
 
         # def is_going_to_choosePosition(self, event):
         #     text = event.message.text

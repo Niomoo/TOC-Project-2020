@@ -14,7 +14,7 @@ load_dotenv()
 
 
 machine = TocMachine(
-    states=["user", "menu", "weather", "planTour", "choosePosition",
+    states=["user", "menu", "weather", "planTour", "choosePosition", "show_fsm_pic",
             "enterPosition", "preference", "chooseRoute",],
     transitions=[
         {
@@ -47,6 +47,12 @@ machine = TocMachine(
             "dest": "chooseRoute",
             "conditions": "is_going_to_chooseRoute",
         },
+        {
+             "trigger": "advance",
+             "source": "menu",
+             "dest": "show_fsm_pic",
+             "conditions": "is_going_to_show_fsm_pic",
+         },
         # {
         #     "trigger": "advance",
         #     "source": "planTour",
@@ -79,18 +85,23 @@ machine = TocMachine(
         # },
         {
             "trigger": "go_back", 
-            "source": ["menu", "chooseRoute"], 
+            "source": ["menu"], 
             "dest": "user"
         },
         {
             "trigger": "go_back_menu",
-            "source": ["weather", "planTour","choosePosition","positioning", "enterPosition", "inputPosition"],
+            "source": ["weather", "planTour","choosePosition","show_fsm_pic","positioning", "enterPosition", "inputPosition"],
             "dest": "menu",
         },
         {
             "trigger": "go_back_planTour",
             "source": ["preference", "choosePosition"],
             "dest": "planTour", 
+        },
+        {
+            "trigger": "go_back_preference",
+            "source": ["chooseRoute"],
+            "dest": "preference",
         }
     ],
     initial="user",
