@@ -2,7 +2,6 @@ from transitions.extensions import GraphMachine
 from utils import send_text_message, send_carousel_message, send_button_message, send_image_message
 import requests
 from linebot.models import ImageCarouselColumn, URITemplateAction, MessageTemplateAction
-from bs4 import BeautifulSoup
 
 global departure
 departure = '駁二藝術特區'
