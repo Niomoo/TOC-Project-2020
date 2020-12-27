@@ -15,7 +15,7 @@ load_dotenv()
 
 machine = TocMachine(
     states=["user", "menu", "weather", "planTour", "choosePosition",
-            "enterPosition", "preference"],
+            "enterPosition", "preference", "chooseRoute",],
     transitions=[
         {
             "trigger": "advance",
@@ -38,36 +38,54 @@ machine = TocMachine(
         {
             "trigger": "advance",
             "source": "planTour",
-            "dest": "choosePosition",
-            "conditions": "is_going_to_choosePosition",
-        },
-        {
-            "trigger": "advance",
-            "source": "choosePosition",
-            "dest": "positioning",
-            "conditions": "is_going_to_positioning",
-        },
-        {
-            "trigger": "advance",
-            "source": "planTour",
-            "dest": "enterPosition",
-            "conditions": "is_going_to_enterPosition",
-        },
-        {
-            "trigger": "advance",
-            "source": "enterPosition",
-            "dest": "inputPosition",
-            "conditions": "is_going_to_inputPosition",
-        },
-        {
-            "trigger": "advance",
-            "source": ["positioning", "inputPosition"],
             "dest": "preference",
             "conditions": "is_going_to_preference",
         },
         {
+            "trigger": "advance",
+            "source": "preference",
+            "dest": "chooseRoute",
+            "conditions": "is_going_to_chooseRoute",
+        },
+        {
+            "trigger": "advance",
+            "source": "chooseRoute",
+            "dest": "user",
+            "conditions": "is_going_to_menu"
+        },
+        # {
+        #     "trigger": "advance",
+        #     "source": "planTour",
+        #     "dest": "choosePosition",
+        #     "conditions": "is_going_to_choosePosition",
+        # },
+        # {
+        #     "trigger": "advance",
+        #     "source": "choosePosition",
+        #     "dest": "positioning",
+        #     "conditions": "is_going_to_positioning",
+        # },
+        # {
+        #     "trigger": "advance",
+        #     "source": "planTour",
+        #     "dest": "enterPosition",
+        #     "conditions": "is_going_to_enterPosition",
+        # },
+        # {
+        #     "trigger": "advance",
+        #     "source": "enterPosition",
+        #     "dest": "inputPosition",
+        #     "conditions": "is_going_to_inputPosition",
+        # },
+        # {
+        #     "trigger": "advance",
+        #     "source": ["positioning", "inputPosition"],
+        #     "dest": "preference",
+        #     "conditions": "is_going_to_preference",
+        # },
+        {
             "trigger": "go_back", 
-            "source": ["menu"], 
+            "source": ["menu", "chooseRoute"], 
             "dest": "user"
         },
         {
@@ -77,7 +95,7 @@ machine = TocMachine(
         },
         {
             "trigger": "go_back_planTour",
-            "source": "preference",
+            "source": ["preference", "choosePosition"],
             "dest": "planTour", 
         }
     ],
@@ -155,14 +173,16 @@ def webhook_handler():
             elif machine.state == 'menu':
                 send_text_message(event.reply_token, '輸入「weather」查看天氣。\n輸入「tour」規劃旅程')
             elif machine.state == 'enterPosition': 
-                send_text_message(event.reply_token, '輸入景點關鍵字')
+                send_text_message(event.reply_token, '請輸入景點關鍵字')
             elif machine.state == 'choosePosition':
-                send_text_message(event.reply_token, '選擇定位所在地')
+                send_text_message(event.reply_token, '請選擇定位所在地')
             elif machine.state == 'positioning': 
                 send_text_message(event.reply_token, '請傳送位置訊息')
             elif machine.state == 'preference':
                 send_text_message(event.reply_token, '輸入旅程的偏好')
-
+            elif machine.state == 'chooseRoute':
+                send_text_message(event.reply_token, '選擇旅程')
+                
     return 'OK'
 
 
