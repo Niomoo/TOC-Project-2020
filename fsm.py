@@ -119,12 +119,12 @@ class TocMachine(GraphMachine):
             text = '好漂亮'
             send_text_message(event.reply_token, text)
         elif event.message.text.lower() == '歷史古蹟':
-            text = '讚讚'
+            text = '台南古蹟真的很多欸'
             send_text_message(event.reply_token, text)
         elif event.message.text.lower() == '藝術文化':
-            text = '文青'
+            text = '文青仔喔'
             send_text_message(event.reply_token, text)
-        self.go_back_menu(event)
+        self.go_back(event)
 
 
         # def is_going_to_choosePosition(self, event):
