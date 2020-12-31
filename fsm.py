@@ -28,6 +28,10 @@ class TocMachine(GraphMachine):
                 label='規劃旅程',
                 text='tour'
             ),
+            MessageTemplateAction(
+                label='我想聊天',
+                text='chat'
+            ),
         ]
         url = 'https://miro.medium.com/max/2732/1*tQYvg76G0vvov4Qsjt0klg.jpeg'
         reply_token = event.reply_token
@@ -137,6 +141,16 @@ class TocMachine(GraphMachine):
          line_bot_api = LineBotApi( os.getenv('LINE_CHANNEL_ACCESS_TOKEN') )
          line_bot_api.reply_message(reply_token, message_to_reply)
          self.go_back_menu(event)
+
+    def is_going_to_chat(self, event):
+        text = event.message.text
+        return text.lower() == "chat"
+
+    def on_enter_chat(self, event):
+        print("let's chat")
+        reply_token = event.reply_token
+        send_text_message(reply_token, "拉拉拉拉")
+        self.go_back_menu(event)
 
         # def is_going_to_choosePosition(self, event):
         #     text = event.message.text
